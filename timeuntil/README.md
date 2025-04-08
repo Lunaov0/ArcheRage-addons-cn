@@ -1,5 +1,5 @@
-# Time Until Next Event
-Time until
+#活动时间表
 
-todo
-![Time until](https://i.imgur.com/OcfefIq9la.png)
++在原版基础上进行汉化
++进入世界时检测鲸鱼烛台东部状态并添加计时器
++东部状态计时器
