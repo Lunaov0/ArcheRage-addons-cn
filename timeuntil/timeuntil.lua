@@ -39,10 +39,10 @@ local buttonskin = {
     }
 
 local timerAnchor = CreateEmptyWindow("timerAnchor", "UIParent")
-timerAnchor:Show(true)
-timerAnchor:AddAnchor("TOPLEFT", "UIParent", 100, 100)
-timerAnchor:SetExtent(150, 50)
-timerAnchor:EnableDrag(true)
+      timerAnchor:Show(true)
+      timerAnchor:AddAnchor("TOPLEFT", "UIParent", 100, 100)
+      timerAnchor:SetExtent(150, 50)
+      timerAnchor:EnableDrag(true)
 local background = timerAnchor:CreateColorDrawable(0, 0, 0, 0.5, "background")
 background:AddAnchor("TOPLEFT", timerAnchor, 0, 0)
 background:AddAnchor("BOTTOMRIGHT", timerAnchor, 0, 0)
@@ -50,9 +50,9 @@ local amountOfTimers = 10
 local eventLabels = {}
 local timerLabels = {}
 function updateTimers()
-    for i, lbl in ipairs(eventLabels) do lbl:Show(false) end
-    for i, lbl in ipairs(timerLabels) do lbl:Show(false) end
-    eventLabels = {}
+	for i, lbl in ipairs(eventLabels) do lbl:Show(false) end
+    for i, lbl in ipairs(timerLabels) do lbl:Show(false) end    
+	eventLabels = {}
     timerLabels = {}
     timerAnchor:SetExtent(150, amountOfTimers * 25)
 
@@ -80,21 +80,28 @@ function updateTimers()
 end
 updateTimers()
 local moreEntries = timerAnchor:CreateChildWidget("button", "moreEntries", 0, true)
-moreEntries:AddAnchor("TOPLEFT", timerAnchor, -5, -25)
-ApplyButtonSkin(moreEntries, buttonskin)
-moreEntries:SetExtent(35,25)
-moreEntries:SetText("+")
-function moreEntries:OnClick(arg) amountOfTimers = amountOfTimers + 1 updateTimers() end
-moreEntries:SetHandler("OnClick", moreEntries.OnClick)
+      moreEntries:AddAnchor("TOPLEFT", timerAnchor, -5, -25)
+      ApplyButtonSkin(moreEntries, buttonskin)
+      moreEntries:SetExtent(35,25)
+      moreEntries:SetText("+")
+      function moreEntries:OnClick(arg)
+        amountOfTimers = amountOfTimers + 1
+        updateTimers()
+      end
+      moreEntries:SetHandler("OnClick", moreEntries.OnClick)
 local lessEntries = timerAnchor:CreateChildWidget("button", "lessEntries", 0, true)
-lessEntries:AddAnchor("TOPLEFT", timerAnchor, 25, -25)
-ApplyButtonSkin(lessEntries, buttonskin)
-lessEntries:SetExtent(35,25)
-lessEntries:SetText("-")
-function lessEntries:OnClick(arg) amountOfTimers = amountOfTimers - 1 updateTimers() end
-lessEntries:SetHandler("OnClick", lessEntries.OnClick)
+      lessEntries:AddAnchor("TOPLEFT", timerAnchor, 25, -25)
+      ApplyButtonSkin(lessEntries, buttonskin)
+      lessEntries:SetExtent(35,25)
+      lessEntries:SetText("-")
+      function lessEntries:OnClick(arg)
+        amountOfTimers = amountOfTimers - 1
+        updateTimers()
+      end
+      lessEntries:SetHandler("OnClick", lessEntries.OnClick)
 
 ----- save draggable window ----------
+
 local filePath = "TimeUntilWindowPos.txt"
 local function SaveWindowPosition(x, y)
     local file = io.open(filePath, "w")
@@ -103,13 +110,22 @@ local function SaveWindowPosition(x, y)
 end
 local function LoadSavedPosition()
     local file = io.open(filePath, "r")
-    if not file then return 0, 0 end
+    if not file then
+        return 0, 0
+    end
     local line = file:read("*line") 
     file:close()
     local x,y = line:match("(%d+),(%d+)")
-    if x and y then return x,y else return 0,0 end
+    if x and y then
+        return x,y
+    else
+        return 0,0
+    end
 end
-function timerAnchor:OnDragStart() self:StartMoving() self.moving = true end
+function timerAnchor:OnDragStart()
+    self:StartMoving()
+    self.moving = true
+end
 timerAnchor:SetHandler("OnDragStart", timerAnchor.OnDragStart)
 function timerAnchor:OnDragStop()
     self:StopMovingOrSizing()
@@ -126,10 +142,11 @@ timerAnchor:AddAnchor("TOPLEFT", "UIParent", tonumber(savedWindowX), tonumber(sa
 
 local whaleConflict = false
 local aegConflict = true
+local eastConflict = false
 local dynamicEvents = {}
 
 local serverEvents = {
-    ["GR"] = {
+    ["迷雾"] = {
        { times = {
             {hour = 2, minute = 20, duration = 20},
             {hour = 6, minute = 20, duration = 20},
@@ -140,7 +157,7 @@ local serverEvents = {
         },
         days = {1, 2, 3, 4, 5, 6, 7}
     }},
-    ["CR"] = {
+    ["征兆"] = {
        { times = {
             {hour = 0, minute = 20, duration = 10},
             {hour = 4, minute = 20, duration = 10},
@@ -151,7 +168,7 @@ local serverEvents = {
         },
         days = {1, 2, 3, 4, 5, 6, 7}
     } },
-    ["SG CR"] = {
+    ["安塔伦"] = {
     {    times = {
             {hour = 1, minute = 20, duration = 10},
             {hour = 5, minute = 20, duration = 10},
@@ -173,23 +190,23 @@ local serverEvents = {
         },
         days = {1, 2, 3, 4, 5, 6, 7}
     } },
-    ["Lusca"] = { times = {{hour = 12, minute = 20, duration = 30}}, days = {1, 2, 3, 4, 5, 6, 7} },
-    ["BD"] = {
+    ["阿肯"] = { times = {{hour = 12, minute = 20, duration = 30}}, days = {1, 2, 3, 4, 5, 6, 7} },
+    ["黑龙"] = {
         { times = {{hour = 21, minute = 30, duration = 60}}, days = {3, 5} },
         { times = {{hour = 18, minute = 30, duration = 60}}, days = {7} }
     },
-    ["Kraken"] = {
+    ["克拉肯"] = {
         { times = {{hour = 22, minute = 30, duration = 60}}, days = {3, 5} },
         { times = {{hour = 19, minute = 30, duration = 60}}, days = {7} }
     },
-    ["Leviathan"] = {
+    ["利维坦"] = {
         { times = {{hour = 20, minute = 05, duration = 60}}, days = {3, 5} },
         { times = {{hour = 17, minute = 05, duration = 60}}, days = {7} }
     },
-    ["Charybdis"] = {
+    ["卡里迪斯"] = {
         { times = {{hour = 21, minute = 30, duration = 60}}, days = {1, 5} }
     },
-    ["Small Titan"] = {
+    ["泰坦小怪"] = {
         { times = {
             {hour = 4, minute = 00, duration = 15},
             {hour = 7, minute = 00, duration = 15},
@@ -201,33 +218,33 @@ local serverEvents = {
         }, 
         days = {3, 6} }
     },
-    ["Big Titan"] = {
+    ["泰坦BOSS"] = {
         { times = {
         	{hour = 14, minute = 00, duration = 15}, 
         	{hour = 21, minute = 00, duration = 15}
         }, 
         days = {4, 7} }
     },
-    ["Anthalon (G)"] = {
+    ["庭院安塔伦"] = {
         { times = {{hour = 21, minute = 30, duration = 45}}, days = {1, 2, 6} }
     },
-    ["Halcy"] = {
+    ["黄金"] = {
         { times = {{hour = 1, minute = 30, duration = 30}, {hour = 11, minute = 00, duration = 10}, {hour = 20, minute = 30, duration = 10}}, days = {1, 2, 3, 4, 5, 6, 7} }
     },
-    ["RD"] = {
+    ["红龙"] = {
         { times = {{hour = 2, minute = 00, duration = 15}, {hour = 10, minute = 30, duration = 15}, {hour = 20, minute = 00, duration = 15}}, days = {1, 2, 4, 6} }
     },
-    ["Abyssal Atk"] = {
+    ["深渊"] = {
         { times = {{hour = 12, minute = 00, duration = 30}, {hour = 22, minute = 30, duration = 30}}, days = {3, 5, 7} }
     },
-    ["Hasla"] = {
+    ["翡翠谷征兆"] = {
         { times = {{hour = 18, minute = 49, duration = 15}, {hour = 20, minute = 49, duration = 15}}, days = {1, 2, 3, 4} }
     },
-    ["Akasch"] = {
+    ["守山"] = {
         { times = {{hour = 15, minute = 00, duration = 20}, {hour = 18, minute = 30, duration = 20}, {hour = 21, minute = 30, duration = 20}}, days = {7} },
         { times = {{hour = 15, minute = 00, duration = 20}, {hour = 18, minute = 30, duration = 20}, {hour = 22, minute = 00, duration = 20}}, days = {6} }
     },
-    ["Prairie"] = {
+    ["大草原"] = {
         { times = {{hour = 9, minute = 00, duration = 20}, {hour = 22, minute = 00, duration = 20}}, days = {6, 7} }
     }
 }
@@ -285,14 +302,19 @@ function timerAnchor:OnUpdate(dt)
     timer = timer + dt
     if timer > 1000 then
         timer = 0
+
         local isAM, currentHour, currentMinute = X2Time:GetGameTime()
+
         local serverTimeTable = UIParent:GetServerTimeTable()
         local currentServerMinutes = serverMinutesSinceMidnight(serverTimeTable)
         local dayOfWeek = calculateDayOfWeek(serverTimeTable.year, serverTimeTable.month, serverTimeTable.day)
+
+
         local sortedEvents = {}
         for name, eventList in pairs(serverEvents) do
             for _, eventData in ipairs(eventList) do
                 local minutesList = getServerEventMinutes(eventData.times, eventData.days, currentServerMinutes, dayOfWeek)
+                
                 for i, minutesAway in ipairs(minutesList) do
                     if minutesAway then
                         --X2Chat:DispatchChatMessage(CMF_SYSTEM, tostring(minutesAway) .. " - " .. eventData.times[i].duration)
@@ -309,7 +331,7 @@ function timerAnchor:OnUpdate(dt)
             end
         end
 
-        for i = #dynamicEvents, 1, -1 do
+		for i = #dynamicEvents, 1, -1 do
             local ev = dynamicEvents[i]
             local minutesLeftUntilStart = ev.endTime - currentServerMinutes - ev.duration
             if currentServerMinutes > ev.endTime then
@@ -326,7 +348,10 @@ function timerAnchor:OnUpdate(dt)
             end
         end
 
-        table.sort(sortedEvents, function(a, b) return a.minutes < b.minutes end)
+        table.sort(sortedEvents, function(a, b)
+            return a.minutes < b.minutes
+        end)
+
         local skipCounter = 0
         for i, event in ipairs(sortedEvents) do
             --X2Chat:DispatchChatMessage(CMF_SYSTEM, tostring(event.minutes))
@@ -340,15 +365,15 @@ function timerAnchor:OnUpdate(dt)
                         eventLabels[iWithSkip].style:SetColor(255, 0, 0, 255)
                         timerLabels[iWithSkip].style:SetColor(255, 0, 0, 255)
                         local timeEventIsActive = event.duration + event.minutes
-                        timerLabels[iWithSkip]:SetText(string.format("Ends %02d", timeEventIsActive))
+                        timerLabels[iWithSkip]:SetText(string.format("%02d分钟结束", timeEventIsActive))
                     else
                         eventLabels[iWithSkip].style:SetColor(255, 255, 255, 255)
                         timerLabels[iWithSkip].style:SetColor(255, 255, 255, 255)
-                        if event.name == "Big Titan" or event.name == "Small Titan" then
-                            eventLabels[iWithSkip].style:SetColor(0.3, 0.7, 1, 255)
+                        if event.name == "泰坦BOSS" or event.name == "泰坦小怪" then
+                        	eventLabels[iWithSkip].style:SetColor(0.3, 0.7, 1, 255)
                             timerLabels[iWithSkip].style:SetColor(0.3, 0.7, 1, 255)
                         end
-                        if event.name == "Whalesong" or event.name == "Aegis" then
+						if event.name == "Whalesong" or event.name == "Aegis" then
                             eventLabels[iWithSkip].style:SetColor(1, 0.6, 0.1, 255)
                             timerLabels[iWithSkip].style:SetColor(1, 0.6, 0.1, 255)
                         end
@@ -358,6 +383,14 @@ function timerAnchor:OnUpdate(dt)
                             timerLabels[iWithSkip]:SetText(string.format("%02d:%02d", hours, minutes))
                         end
                     end
+					if event.name == "东部和平" then
+						eventLabels[iWithSkip].style:SetColor(0.3, 0.7, 1, 255)
+                        timerLabels[iWithSkip].style:SetColor(0.3, 0.7, 1, 255)
+					end
+					if event.name == "东部战争" then
+						eventLabels[iWithSkip].style:SetColor(1, 0.6, 0.1, 255)
+                        timerLabels[iWithSkip].style:SetColor(1, 0.6, 0.1, 255)
+					end
                 end
             else
                 skipCounter = skipCounter + 1
@@ -367,7 +400,10 @@ function timerAnchor:OnUpdate(dt)
 end
 timerAnchor:SetHandler("OnUpdate", timerAnchor.OnUpdate)
 
-local events = { "HPW_ZONE_STATE_CHANGE" }
+local events = {
+  "HPW_ZONE_STATE_CHANGE"
+}
+
 local function GenericEventHandler(eventName)
     return function(info1)
         if info1 == 102 or info1 == 103 then
@@ -375,13 +411,14 @@ local function GenericEventHandler(eventName)
             if zoneInfo.conflictState == 5 then
                 local serverTime = UIParent:GetServerTimeTable()
                 local now = serverMinutesSinceMidnight(serverTime)
-                local name = (info1 == 102) and "Aegis" or "Whalesong"
+                local name = (info1 == 102) and "烛台" or "鲸鱼"
                 local startIn = 15
-                local duration = 15
+                local duration = (info1 == 102) and 25 or 9
                 local endTime = now + startIn + duration
                 for _, e in ipairs(dynamicEvents) do
                     if e.name == name and now < e.endTime then return end
                 end
+
                 table.insert(dynamicEvents, {
                     name = name,
                     minutes = startIn,
@@ -391,8 +428,210 @@ local function GenericEventHandler(eventName)
                 })
             end
         end
+		if info1 == 110 then
+			local zoneInfo = X2Map:GetZoneStateInfoByZoneId(info1)
+			if zoneInfo.conflictState == 5 then
+				local serverTime = UIParent:GetServerTimeTable()
+                local now = serverMinutesSinceMidnight(serverTime)
+                local name = (info1 == 110) and "Eastern Hiram Mountains"
+				name = "东部战争"
+                local startIn = 10
+                local duration = 50
+                local endTime = now + startIn + duration
+                for _, e in ipairs(dynamicEvents) do
+                    if e.name == name and now < e.endTime then return end
+                end
+
+                table.insert(dynamicEvents, {
+                    name = name,
+                    minutes = startIn,
+                    duration = duration,
+                    isServerEvent = false,
+                    endTime = endTime
+                })
+            end
+			if zoneInfo.conflictState == 7 then
+				local serverTime = UIParent:GetServerTimeTable()
+                local now = serverMinutesSinceMidnight(serverTime)
+                local name = (info1 == 110) and "Eastern Hiram Mountains"
+				name = "东部和平"
+                local startIn = 0
+                local duration = 60
+                local endTime = now + startIn + duration
+                for _, e in ipairs(dynamicEvents) do
+                    if e.name == name and now < e.endTime then return end
+                end
+
+                table.insert(dynamicEvents, {
+                    name = name,
+                    minutes = startIn,
+                    duration = duration,
+                    isServerEvent = false,
+                    endTime = endTime
+                })
+            end
+		end
     end
 end
+
+
 for _, event in ipairs(events) do
     UIParent:SetEventHandler(UIEVENT_TYPE[event], GenericEventHandler(event))
 end
+
+local function EnteredWorld()
+    local whInfo = X2Map:GetZoneStateInfoByZoneId(103)
+    local aeInfo = X2Map:GetZoneStateInfoByZoneId(102)
+	local eastInfo = X2Map:GetZoneStateInfoByZoneId(110)
+	if whInfo.conflictState == 5 then
+		local serverTime = UIParent:GetServerTimeTable()
+		local now = serverMinutesSinceMidnight(serverTime)
+		local name = "鲸鱼"
+		local startIn = whInfo.remainTime/60 + 5
+		local duration = 9
+		local endTime = now + startIn + duration
+		for _, e in ipairs(dynamicEvents) do
+			if e.name == name and now < e.endTime then return end
+		end
+
+		table.insert(dynamicEvents, {
+			name = name,
+			minutes = startIn,
+			duration = duration,
+			isServerEvent = false,
+			endTime = endTime
+		})
+	end
+	if aeInfo.conflictState == 5 then
+		local serverTime = UIParent:GetServerTimeTable()
+		local now = serverMinutesSinceMidnight(serverTime)
+		local name = "烛台"
+		local startIn = aeInfo.remainTime/60 + 5
+		local duration = 25
+		local endTime = now + startIn + duration
+		for _, e in ipairs(dynamicEvents) do
+			if e.name == name and now < e.endTime then return end
+		end
+
+		table.insert(dynamicEvents, {
+			name = name,
+			minutes = startIn,
+			duration = duration,
+			isServerEvent = false,
+			endTime = endTime
+		})
+	end
+	if whInfo.conflictState == 6 then
+		if whInfo.remainTime/60 > 76 then
+			local serverTime = UIParent:GetServerTimeTable()
+			local now = serverMinutesSinceMidnight(serverTime)
+			local name = "鲸鱼"
+			if whInfo.remainTime/60 > 76 then
+				local startIn = 0
+				local duration = whInfo.remainTime/60 - 76
+			end
+			if whInfo.remainTime/60 > 85 then
+				local startIn = whInfo.remainTime/60 - 85
+				local duration = 9
+			end
+			local endTime = now + startIn + duration
+			for _, e in ipairs(dynamicEvents) do
+				if e.name == name and now < e.endTime then return end
+			end
+
+			table.insert(dynamicEvents, {
+				name = name,
+				minutes = startIn,
+				duration = duration,
+				isServerEvent = false,
+				endTime = endTime
+			})
+		end
+	end
+	if aeInfo.conflictState == 6 then
+		if aeInfo.remainTime/60 > 60 then
+			local serverTime = UIParent:GetServerTimeTable()
+			local now = serverMinutesSinceMidnight(serverTime)
+			local name = "烛台"
+			if aeInfo.remainTime/60 > 60 then
+				local startIn = 0
+				local duration = aeInfo.remainTime/60 - 60
+			end
+			if aeInfo.remainTime/60 > 85 then
+				local startIn = aeInfo.remainTime/60 - 85
+				local duration = 25
+			end
+			local endTime = now + startIn + duration
+			for _, e in ipairs(dynamicEvents) do
+				if e.name == name and now < e.endTime then return end
+			end
+
+			table.insert(dynamicEvents, {
+				name = name,
+				minutes = startIn,
+				duration = duration,
+				isServerEvent = false,
+				endTime = endTime
+			})
+		end
+	end
+	if eastInfo.conflictState == 5 then
+		local serverTime = UIParent:GetServerTimeTable()
+		local now = serverMinutesSinceMidnight(serverTime)
+		local name = "东部战争"
+		local startIn = eastInfo.remainTime/60
+		local duration = 50
+		local endTime = now + startIn + duration
+		for _, e in ipairs(dynamicEvents) do
+			if e.name == name and now < e.endTime then return end
+		end
+
+		table.insert(dynamicEvents, {
+			name = name,
+			minutes = startIn,
+			duration = duration,
+			isServerEvent = false,
+			endTime = endTime
+		})
+	end
+	if eastInfo.conflictState == 6 then
+		local serverTime = UIParent:GetServerTimeTable()
+		local now = serverMinutesSinceMidnight(serverTime)
+		local name = "东部战争"
+		local startIn = 0
+		local duration = eastInfo.remainTime/60
+		local endTime = now + startIn + duration
+		for _, e in ipairs(dynamicEvents) do
+			if e.name == name and now < e.endTime then return end
+		end
+
+		table.insert(dynamicEvents, {
+			name = name,
+			minutes = startIn,
+			duration = duration,
+			isServerEvent = false,
+			endTime = endTime
+		})
+	end
+	if eastInfo.conflictState == 7 then
+		local serverTime = UIParent:GetServerTimeTable()
+		local now = serverMinutesSinceMidnight(serverTime)
+		local name = "东部和平"
+		local startIn = 0
+		local duration = eastInfo.remainTime/60
+		local endTime = now + startIn + duration
+		for _, e in ipairs(dynamicEvents) do
+			if e.name == name and now < e.endTime then return end
+		end
+
+		table.insert(dynamicEvents, {
+			name = name,
+			minutes = startIn,
+			duration = duration,
+			isServerEvent = false,
+			endTime = endTime
+		})
+	end
+end
+UIParent:SetEventHandler(UIEVENT_TYPE.ENTERED_WORLD, EnteredWorld)
+---
